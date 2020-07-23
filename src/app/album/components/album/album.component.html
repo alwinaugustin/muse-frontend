@@ -1,0 +1,97 @@
+<div style="height: 20px;">
+</div>
+<div class="card" style="width: 100%;">
+    <div class="card-header">
+        Albums
+        <button class="primary float-right" (click)="openModal()">Add Release</button>
+    </div>
+    <div class="card-body">
+        <p-table [value]="albums">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ID</th>
+                    <th>Album Name</th>
+                    <th>Release Date</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-album>
+                <tr>
+                    <td>{{album.id}}</td>
+                    <td>{{album.album_name}}</td>
+                    <td>{{album.release_date}}</td>
+                    <td><button class="btn btn-primary btn-sm" (click)="edit(album)">Edit</button></td>
+                    <td><button class="btn btn-danger btn-sm" (click)="delete(album.id)">Delete</button></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<ng-template #albumFormModal let-modal>
+    <form [formGroup]="albumForm" (ngSubmit)="submitAlbum()">
+        <div class="modal-header">
+            <h4 class="modal-title text-center fw-bold mt">
+                Create Album
+            </h4>
+            <button type="button" class="close" (click)="d('Cross click')">&times;</button>
+        </div>
+        <div class="modal-body bg-gray-lighter">
+            <div class="row">
+                <div class="col-12 form-group">
+                    <label for="placement_name_val">Album Name</label>
+                    <input type="text" class="form-control" id="album_name" formControlName="album_name"
+                        placeholder="Album Name" />
+
+                    <span *ngIf="submitted && f.album_name.errors" class="text-danger">
+                        <span *ngIf="f.album_name.errors.required">Name is required</span>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 form-group">
+                    <label for="placement_name_val">Release Date</label>
+                    <div>
+                        <p-calendar formControlName="release_date"></p-calendar>
+                    </div>
+                    <span *ngIf="submitted && f.release_date.errors" class="text-danger">
+                        <span *ngIf="f.release_date.errors.required">Release Date is required</span>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 form-group">
+                    <label for="placement_name_val">Artists</label>
+                    <select class="form-control" formControlName="artists" multiple>
+                        <option *ngFor="let artist of artists" [value]="artist.id">{{artist.artist_name}}</option>
+                    </select>
+                    <span *ngIf="submitted && f.artists.errors" class="text-danger">
+                        <span *ngIf="f.artists.errors.required">Artists required</span>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 form-group">
+                    <label for="placement_name_val">Songs</label>
+                    <select class="form-control" formControlName="songs" multiple>
+                        <option *ngFor="let song of songs" [value]="song.id">{{song.song_name}}</option>
+                    </select>
+                    <span *ngIf="submitted && f.songs.errors" class="text-danger">
+                        <span *ngIf="f.songs.errors.required">Songs required</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="float-right">
+                <button type="button" class="btn btn-danger" (click)="c('Close click')">
+                    <i class="fa fa-times" aria-hidden="true"></i> Close
+                </button>
+                <button type="submit" class="btn btn-success">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i> Save
+                </button>
+            </div>
+        </div>
+    </form>
+</ng-template>

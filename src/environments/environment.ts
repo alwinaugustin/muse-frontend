@@ -3,9 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  ENV: 'dev',
+  url: '',
+  api: {
+    base_url: 'http://muse-api.localhost/api/',
+    cache_seconds: 3600,
+    token_refresh_time: 86400,
+  }
 };
-
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

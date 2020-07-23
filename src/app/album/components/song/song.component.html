@@ -1,0 +1,69 @@
+<div style="height: 20px;">
+</div>
+<div class="card" style="width: 100%;">
+    <div class="card-header">
+        Albums
+        <button class="primary float-right" (click)="openModal()">Add Song</button>
+    </div>
+    <div class="card-body">
+        <p-table [value]="songs">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ID</th>
+                    <th>Album Name</th>
+                    <th>Release Date</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-song>
+                <tr>
+                    <td>{{song.id}}</td>
+                    <td>{{song.song_name}}</td>
+                    <td>{{song.song_duration}}</td>
+                    <td><button class="btn btn-primary btn-sm" (click)="edit(song)">Edit</button></td>
+                    <td><button class="btn btn-danger btn-sm" (click)="delete(song.id)">Delete</button></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<ng-template #songFormModal let-modal>
+    <form [formGroup]="songForm" (ngSubmit)="submitSong(c)">
+        <div class="modal-header">
+            <h4 class="modal-title text-center fw-bold mt">
+                Create Songs
+            </h4>
+            <button type="button" class="close" (click)="d('Cross click')">&times;</button>
+        </div>
+        <div class="modal-body bg-gray-lighter">
+            <div class="row">
+                <div class="col-12 form-group">
+                    <label for="placement_name_val">Song Name</label>
+                    <input type="text" class="form-control" id="placement_name_val" formControlName="song_name"
+                        placeholder="Song Name" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 form-group">
+                    <label for="placement_name_val">Song Duration</label>
+                    <div>
+                        <input class="form-control" type="text" formControlName="song_duration" placeholder="Song Duration"/>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="float-right">
+                <button type="button" class="btn btn-danger" (click)="c('Close click')">
+                    <i class="fa fa-times" aria-hidden="true"></i> Close
+                </button>
+                <button type="submit" class="btn btn-success">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i> Save
+                </button>
+            </div>
+        </div>
+    </form>
+</ng-template>
