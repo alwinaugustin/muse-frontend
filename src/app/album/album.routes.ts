@@ -1,5 +1,7 @@
 import { RouterModule } from '@angular/router';
 
+
+import { AuthGuardService } from '../auth/guard/auth.guard';
 import { AlbumComponent } from './components/album/album.component';
 import { SongComponent } from './components/song/song.component';
 import { ArtistComponent } from './components/artist/artist.component';
@@ -13,6 +15,7 @@ export const AlbumRoutes = RouterModule.forChild([
     {
         path: '',
         component: LayoutComponent,
+        canActivate: [AuthGuardService],
         children: [
             {
                 path: '',

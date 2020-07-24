@@ -110,6 +110,7 @@ export class ArtistComponent implements OnInit {
             .deleteAlbum(albumId)
             .subscribe(
                 () => {
+                    this.success = 'Artist Deleted successfully';
                     this.getArtists();
                 },
                 error => this.errors = error

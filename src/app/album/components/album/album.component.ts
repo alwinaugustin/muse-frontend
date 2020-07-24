@@ -22,14 +22,14 @@ export class AlbumComponent implements OnInit {
     public errors: any;
 
     public albums: any;
-    public songs:any;
-    public artists:any;
+    public songs: any;
+    public artists: any;
     public albumForm: FormGroup;
     public success: string;
-    public editId:number;
+    public editId: number;
     public submitted = false;
 
-    constructor(private albumService: AlbumService, private modalService: NgbModal,private formBuilder: FormBuilder) { }
+    constructor(private albumService: AlbumService, private modalService: NgbModal, private formBuilder: FormBuilder) { }
 
     ngOnInit(): void {
         this.getAlbums();
@@ -38,11 +38,7 @@ export class AlbumComponent implements OnInit {
     }
 
     /**
-     * Load User list
-     *
-     * @private
-     *
-     * @memberOf UserListComponent
+     * 
      */
     public getAlbums() {
 
@@ -58,48 +54,42 @@ export class AlbumComponent implements OnInit {
     }
 
     /**
-    * Submit placement
-    *
-    * @param {Function} close
-    * @return {void}
-    */
-   public submitAlbum(): void {
+     * 
+     */
+    public submitAlbum(): void {
 
-    this.submitted = true;
+        this.submitted = true;
 
-    if (!this.albumForm.valid) {
-        return;
+        if (!this.albumForm.valid) {
+            return;
+        }
+
+        const newDate = this.albumForm.get('release_date').value;
+        const formattedDate = moment(newDate).format('YYYY-MM-DD');
+
+        this.albumForm.patchValue({ release_date: new Date(formattedDate) });
+
+        this.errors = null;
+
+        this.albumService
+            .saveAlbum(this.albumForm.value, this.editId)
+            .pipe(
+                finalize((): void => {
+                    this.getSongs();
+                })
+            )
+            .subscribe(
+                (response: JsendResponse) => {
+                    this.getSongs();
+                    this.modalService.dismissAll();
+                    this.success = response.message;
+                },
+                error => this.errors = error
+            );
     }
 
-    const newDate = this.albumForm.get('release_date').value;
-    const formattedDate = moment(newDate).format('YYYY-MM-DD').toString();
-
-    this.albumForm.patchValue({release_date:new Date(formattedDate)});
-
-    this.errors = null;
-
-    this.albumService
-        .saveAlbum(this.albumForm.value, this.editId)
-        .pipe(
-            finalize((): void => {
-                this.getSongs();
-            })
-        )
-        .subscribe(
-            (response: JsendResponse) => {
-                this.getSongs();
-                this.success = response.message;
-            },
-            error => this.errors = error
-        );
-}
-
     /**
-     * Load User list
-     *
-     * @private
-     *
-     * @memberOf UserListComponent
+     * 
      */
     public getArtists() {
 
@@ -115,11 +105,7 @@ export class AlbumComponent implements OnInit {
     }
 
     /**
-     * Load User list
-     *
-     * @private
-     *
-     * @memberOf UserListComponent
+     * 
      */
     public getSongs() {
 
@@ -145,35 +131,44 @@ export class AlbumComponent implements OnInit {
         this.modalService.open(this.albumFormModal);
     }
 
+    /**
+     * 
+     * @param row 
+     */
     public edit(row) {
         this.editId = row.id;
         this.createAlbumForm(row);
         this.modalService.open(this.albumFormModal);
-        
+
     }
 
-    public delete(albumId:number)
-    {
+    /**
+     * 
+     * @param albumId 
+     */
+    public delete(albumId: number) {
         this.albumService
             .deleteAlbum(albumId)
             .subscribe(
                 () => {
                     this.getAlbums();
+                    this.success = 'Album Deleted Successfully';
                 },
                 error => this.errors = error
             );
     }
 
     /**
-      * Create placement form
-      *
-      * @return {void}
-      */
-     private createAlbumForm(album?:any): void {
-         let artistIds = [];
-         let songIds = [];
+     * 
+     * @param album 
+     */
+    private createAlbumForm(album?: any): void {
+        let artistIds = [];
+        let songIds = [];
+        let release_date = null;
+        let date_object = null;
 
-        if(album) {
+        if (album) {
             let artists = album.artists.data;
             artists.forEach(element => {
                 artistIds.push(element.id);
@@ -183,11 +178,14 @@ export class AlbumComponent implements OnInit {
             songs.forEach(element => {
                 songIds.push(element.id);
             });
+
+            release_date = album.release_date;
+            date_object = new Date(release_date);
         }
 
         this.albumForm = this.formBuilder.group({
             album_name: [_.get(album, 'album_name', ''), Validators.required],
-            release_date: [_.get(album, 'release_date', ''), Validators.required],
+            release_date: [date_object, Validators.required],
             artists: [artistIds, Validators.required],
             songs: [songIds, Validators.required]
         });

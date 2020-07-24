@@ -80,6 +80,7 @@ export class SongComponent implements OnInit {
                 (response: JsendResponse) => {
                     this.getSongs();
                     this.success = response.message;
+                    this.modalService.dismissAll();
                 },
                 error => this.errors = error
             );
@@ -110,6 +111,7 @@ export class SongComponent implements OnInit {
             .deleteAlbum(albumId)
             .subscribe(
                 () => {
+                    this.success = 'Song deleted successfully';
                     this.getSongs();
                 },
                 error => this.errors = error

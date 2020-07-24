@@ -13,6 +13,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ArtistComponent } from './components/artist/artist.component';
 import { SongComponent } from './components/song/song.component';
 import {TableModule} from 'primeng/table';
+import { AuthGuardService } from '../auth/guard/auth.guard';
+import { AuthService } from '../auth/services/auth.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
+
 
 @NgModule({
   declarations: [AlbumComponent, ArtistComponent, SongComponent],
@@ -31,7 +35,10 @@ import {TableModule} from 'primeng/table';
   ],
   providers:[
     ApiService,
-    AlbumService
+    AlbumService,
+    AuthGuardService,
+    AuthService,
+    JwtHelperService
   ]
 })
 export class AlbumModule { }

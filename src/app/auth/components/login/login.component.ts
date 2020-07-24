@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    LocalForage.clear();
     this.loadLoginForm();
   }
 
@@ -95,7 +96,7 @@ export class LoginComponent implements OnInit {
 
     LocalForage.setItem('id_token', token).then(() => {
       this.globalService.setToken();
-      this.router.navigate(['/album/artists']);
+      this.router.navigate(['/album']);
     }).catch(e => {
       this.loginError = e.error.message;
       console.log(this.loginError);

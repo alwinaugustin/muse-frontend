@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { ApiService } from '../shared/services/api.service';
 import { GlobalService } from '../shared/services/global.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 
 
@@ -24,7 +25,8 @@ import { GlobalService } from '../shared/services/global.service';
   providers: [
     AuthService,
     ApiService,
-    GlobalService
+    GlobalService,
+    JwtHelperService
   ],
 })
 export class AuthModule { }

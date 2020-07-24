@@ -1,6 +1,9 @@
 <div style="height: 20px;">
 </div>
 <div class="card" style="width: 100%;">
+    <div class="alert alert-success" role="alert" *ngIf="success">
+        {{success}}
+      </div>
     <div class="card-header">
         Artists
         <button class="primary float-right" (click)="openModal()">Add Artist</button>
@@ -28,7 +31,7 @@
     </div>
 </div>
 
-<ng-template #artistFormModal let-modal>
+<ng-template #artistFormModal let-modal let-c="close" let-d="dismiss">
     <form [formGroup]="artistForm" (ngSubmit)="submitArtist()">
         <div class="modal-header">
             <h4 class="modal-title text-center fw-bold mt">

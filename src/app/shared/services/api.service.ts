@@ -92,9 +92,6 @@ export class ApiService {
         this.method         = options.method;
         const httpParams    = new HttpParams({ fromObject: options.params });
         let headers         = new HttpHeaders();
-       // let token:any = null;
-
-       console.log(GlobalService.token);
 
        if (GlobalService.token) {
             headers = headers.append('Authorization', 'Bearer ' +GlobalService.token);
